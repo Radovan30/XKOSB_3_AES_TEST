@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="cs">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="css/style.css" rel="stylesheet">
+    </head>
+    <body>
+
+        <div class="mn" id="loaderId" style="display: none;">
+            <div id="loader"></div>
+        </div>
+        <div class="mn" id="loaderId2" style="display: none;">
+            <div id="loader"></div>
+            <div class="txtload">Please wait...</div>
+        </div>
+        <div id="mainpage" style="display: block; height: auto !important;">
+        <div id="desktop_view">
+            <div class="container" id="encryption_id">
+
+                <div class="responsive"> <label class="_label" style="background-color: crimson;">Input Type</label>
+                    <select id="inputTypeId" onchange="changeInputType()"
+                        style="border: 1px solid crimson; color: crimson;" title="Select Input Type">
+                        <option value="Message">Message</option>
+                        <option value="File">File</option>
+                    </select>
+                </div><span id="inputTypeFileId" style="display: none;">
+                    <br>
+                    <div class="responsive"> <label class="_label">Upload
+                            File</label>
+                        <input class="upload" id="fileUplodId_" onchange="onSelectFile(event)"
+                            title="Upload file to encrypt" type="file">
+                    </div>
+                </span> <span id="inputTypeMessageId" style="display: block;"> <br>
+                    <div class="responsive10"> <label class="_label">Message<span style="color: red;">**</span></label>
+                        <textarea id="messageId" rows="5" title="Enter title (or) message to encrypt"></textarea>
+                    </div>
+                </span> <br>
+                <div class="responsive10"> <label class="_label" style="padding-bottom: 10px;">Password<span
+                            style="color: red;">**</span></label> <textarea id="passwordId" rows="1"
+                        title="Enter password to protect"></textarea> </div><br>
+                <div class="responsive"> <label class="_label">Encryption
+                        Method</label>
+                    <select id="encryptionMethodId" onchange="onChangeEncryptionMethod()"
+                        title="Select Encryption Method">
+                        <option value="CBC">AES (CBC)</option>
+                        <option value="ECB">AES (ECB)</option>
+                        <option value="CFB">AES (CFB)</option>
+                        <option value="CTR">AES (CTR)</option>
+                        <option value="OFB">AES (OFB)</option>
+                    </select>
+                </div><span id="paddingAndciphersPBKDF2Id" style="display: block;">
+                    <br>
+                    <div class="responsive"> <label class="_label">Padding</label>
+                        <select id="paddingId" title="Select Padding">
+                            <option selected="" value="">Select</option>
+                            <option value="Pkcs7">Pkcs7</option>
+                            <option value="Iso97971">Iso97971</option>
+                            <option value="AnsiX923">AnsiX923</option>
+                            <option value="Iso10126">Iso10126</option>
+                            <option value="ZeroPadding">ZeroPadding</option>
+                            <option value="NoPadding">NoPadding</option>
+                        </select>
+                    </div><br>
+                    <div class="responsive"> <label class="_label">PBKDF2 ?</label>
+                        <select id="ciphersPBKDF2Id" onchange="changeCiphersPBKDF2()" title="Select PBKDF2">
+                            <option value="Yes">Yes</option>
+                            <option selected="" value="No">No</option>
+                        </select>
+                    </div>
+                </span> <span id="ciphersPBKDF2YesId" style="display: none;"> <br>
+                    <div class="responsive"> <label class="_label">Key Size</label>
+                        <select id="bitId" title="Select Key Size">
+                            <option selected="" value="128">128 - Bit</option>
+                            <option value="192">192 - Bit</option>
+                            <option value="256">256 - Bit</option>
+                        </select>
+                    </div><br>
+                    <div class="responsive"> <label class="_label">Iterations</label>
+                        <input id="ciphersIterationsId" title="Enter number of Iterations" type="number" value="0">
+                    </div>
+                </span> <br>
+                <div>
+                    <div class="btn"> <button onclick="desktopViewEncrypt()" title="Click here to encrypt"
+                            type="button">Encrypt
+                            Now</button> </div>
+                </div><br> <span id="enctStrblockId">
+                    <div class="__aes_title"> Encrypted Code </div>
+                    <hr>
+                    <div class="responsive20"> <textarea id="encryptedStringId" onclick="copyText123()" rows="5"
+                            title="Click here to copy encryptd message"></textarea>
+                    </div><br>
+                </span>
+                <div id="isReadyId" style="display: none;">
+                    <div class="btn"> <button onclick="downloadFile()" style="background-color: firebrick;"
+                            title="Click here to download file" type="button">Download
+                            File</button> </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/aesEncrypte.js"></script>
+    </body>
+</html>
