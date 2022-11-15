@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="cs">
     <head>
-        <title>Decryption AES</title>
+        <title>Encryption AES</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- <link href="css/style.css" rel="stylesheet"> -->
         <script src="js/CryptoJS.js"></script>
-        <script src="js/encrypteAES.js"></script>
+        <script src="js/decodeAES.js"></script>
     </head>
     <body>
-        <h1>Šifrovaní AES</h1>
+        <h1>Dešifrovaní AES</h1>
         <ul>
-            <li><a href="index.html">Šifrovaní</a></li>
+            <li><a href="index.html">Zašifrovaní</a></li>
             <li><a href="decode.html">Dešifrování</a></li>
         </ul>
 
@@ -25,42 +25,43 @@
         </div>
 
         <div id="desktop_view">
-            <div class="container" id="encryption_id">
+            <div class="container">
 
-                <div class="responsive"> <label class="_label">Vyber způsob vložení
+                <div class="responsive">
+                    <label class="_label" for="inputTypeId">Vyber způsob vložení
                         šifry</label>
-                    <select id="inputTypeId" onchange="changeInputType()"
-                        style="border: 1px solid crimson; color: crimson;" title="Select Input Type">
-                        <option value="Message">Zpráva</option>
+                    <select id="inputTypeId" onchange="changeInputType()" title="Select Input Type"
+                        style="border: 1px solid crimson;color: crimson;">
+                        <option value="Message" selected="">Zpráva</option>
                         <option value="File">Soubor</option>
                     </select>
                 </div>
 
-                <span id="inputTypeFileId" style="display: none;">
-                    <br>
+                <span id="inputTypeFileId" style="display: none;"><br>
                     <div class="responsive">
-                        <label class="_label">Vyber soubor</label>
-                        <input class="upload" id="fileUplodId_" onchange="onSelectFile(event)"
-                            title="Upload file to encrypt" type="file">
+                        <label class="_label" for="fileUplodId_">Vyber soubor</label>
+                        <input title="Upload encrypted file to decrypt" type="file" id="fileUplodId_"
+                            onchange="onSelectFile(event)" class="upload">
                     </div>
                 </span>
 
-                <span id="inputTypeMessageId" style="display: block;"> <br>
+                <span id="inputTypeMessageId" style="display: block;"><br>
                     <div class="responsive10">
-                        <label class="_label">Zpráva</label>
-                        <textarea id="messageId" rows="5" title="Enter title (or) message to encrypt"></textarea>
+                        <label class="_label" for="messageId">Šifrovaná zpráva</label>
+                        <textarea title="Enter encrypted text (or) message to decrypt" id="messageId"
+                            rows="5"></textarea>
                     </div>
                 </span><br>
 
                 <div class="responsive10">
-                    <label class="_label" style="padding-bottom: 10px;">Klíč</label>
-                    <textarea id="passwordId" rows="1" title="Enter password to protect"></textarea>
+                    <label class="_label" for="passwordId" style="padding-bottom: 10px;">Klíč</label>
+                    <textarea id="passwordId" rows="1"></textarea>
                 </div><br>
 
                 <div class="responsive">
-                    <label class="_label">Šifrovací metoda</label>
-                    <select id="encryptionMethodId" onchange="onChangeEncryptionMethod()"
-                        title="Select Encryption Method">
+                    <label class="_label" for="encryptionMethodId">Šifrovací metoda</label>
+                    <select id="encryptionMethodId" title="Select Encryption Method"
+                        onchange="onChangeEncryptionMethod()">
                         <option value="CBC">AES (CBC)</option>
                         <option value="ECB">AES (ECB)</option>
                         <option value="CFB">AES (CFB)</option>
@@ -74,11 +75,11 @@
                     </select>
                 </div>
 
-                <span id="paddingAndciphersPBKDF2Id" style="display: block;"><br>
+                <span id="paddingAndciphersPBKDF2Id" style="display: none;"><br>
                     <div class="responsive">
-                        <label class="_label">Padding</label>
+                        <label class="_label" for="paddingId">Padding</label>
                         <select id="paddingId" title="Select Padding">
-                            <option selected="" value="">Select</option>
+                            <option value="">Select</option>
                             <option value="Pkcs7">Pkcs7</option>
                             <option value="Iso97971">Iso97971</option>
                             <option value="AnsiX923">AnsiX923</option>
@@ -89,50 +90,48 @@
                     </div><br>
 
                     <div class="responsive">
-                        <label class="_label">Klíč der.funkce</label>
-                        <select id="ciphersPBKDF2Id" onchange="changeCiphersPBKDF2()" title="Select PBKDF2">
+                        <label class="_label" for="ciphersPBKDF2Id">Klíč der.funkce</label>
+                        <select id="ciphersPBKDF2Id" title="Select PBKDF2" onchange="changeCiphersPBKDF2()">
                             <option value="Yes">ANO</option>
-                            <option selected="" value="No">NE</option>
+                            <option value="No" selected="">NE</option>
                         </select>
                     </div>
                 </span>
 
                 <span id="ciphersPBKDF2YesId" style="display: none;"><br>
                     <div class="responsive">
-                        <label class="_label">Velikost klíče</label>
-                        <select id="bitId" title="Select Key Size">
-                            <option selected="" value="128">128 - Bit</option>
+                        <label class="_label" for="bitId">Velikost klíče</label> <select id="bitId"
+                            title="Select Key Size">
+                            <option value="128">128 - Bit</option>
                             <option value="192">192 - Bit</option>
                             <option value="256">256 - Bit</option>
                         </select>
                     </div><br>
 
-                    <div class="responsive"> <label class="_label">Iterace</label>
-                        <input id="ciphersIterationsId" title="Enter number of Iterations" type="number" value="0">
+                    <div class="responsive">
+                        <label class="_label" for="ciphersIterationsId">Iterace</label>
+                        <input id="ciphersIterationsId" type="number" title="Enter number of iterations" value="0">
                     </div>
-
                 </span><br>
 
                 <div>
                     <div class="btn">
-                        <button onclick="desktopViewEncrypt()" title="Click here to encrypt"
-                            type="button">ZAŠIFROVAT</button>
+                        <button type="button" onclick="desktopViewEncrypt()"
+                            title="Click here to decrypte">ROZŠIFROVAT</button>
                     </div>
                 </div><br>
 
                 <span id="enctStrblockId">
-                    <div class="__aes_title"> Zašifrovaný kód</div>
-                    <textarea id="encryptedStringId" onclick="copyText123()" rows="5"
-                        title="Click here to copy encryptd message"></textarea>
+                    <div class="__aes_title"> Dešifrovaný kód</div>
+                    <div class="responsive20">
+                        <textarea id="encryptedStringId" rows="5" onclick="copyText123()"></textarea>
+                    </div><br>
                 </span>
-            </div><br>
 
-            <div id="isReadyId" style="display: none;">
-                <div class="btn">
-                    <button onclick="downloadFile()" style="background-color: firebrick;"
-                        title="Click here to download file" type="button">Stáhnout
-                        soubor
-                    </button>
+                <div id="isReadyId" style="display: none;">
+                    <div class="btn">
+                        <button type="button" onclick="downloadDecryptedFile()">Stáhnout soubor</button>
+                    </div>
                 </div>
             </div>
 

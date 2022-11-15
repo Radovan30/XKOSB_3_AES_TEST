@@ -1,16 +1,19 @@
 var fileData = "";
 var fileUpload = false;
 var filename = "";
+var encryptedData = "";
 
 function reset() {
     document.getElementById( "isReadyId" ).style.display = "none"
 }
 
 function loadContent() {
-    document.getElementById( "isReadyId" ).style.display = "none";
+    document.getElementById( "shareId" ).style.display = "none";
+
+    document.getElementById( "loaderId" ).style.display = "none";
     document.getElementById( "inputTypeMessageId" ).style.display = "block";
     document.getElementById( "inputTypeFileId" ).style.display = "none";
-    document.getElementById( "ciphersPBKDF2YesId" ).style.display = "block";
+    document.getElementById( "ciphersPBKDF2YesId" ).style.display = "none";
     filename = "";
     reset()
 }
@@ -35,8 +38,8 @@ function onChangeEncryptionMethod() {
     document.getElementById( "paddingId" ).value = "";
     document.getElementById( "ciphersPBKDF2Id" ).value = "No";
     document.getElementById( "ciphersIterationsId" ).value = 0;
-    if ( typeMethod === "DES" || typeMethod === "TripleDES" || typeMethod === "Rabbit" ||
-        typeMethod === "RC4" || typeMethod === "RC4Drop" ) {
+    if ( typeMethod === "DES" || typeMethod === "TripleDES" || typeMethod === "Rabbit" || typeMethod === "RC4" ||
+        typeMethod === "RC4Drop" ) {
         document.getElementById( "paddingAndciphersPBKDF2Id" ).style.display = "none";
         document.getElementById( "ciphersPBKDF2YesId" ).style.display = "none"
     } else {
@@ -67,9 +70,8 @@ function desktopViewEncrypt() {
     var message = document.getElementById( "messageId" ).value;
     var password = document.getElementById( "passwordId" ).value;
     cripher = "";
-    console.log( "desktop: ", cripher )
-    if ( inputType === "Message" && ( message === undefined || message === "" || message.
-        trim() === "" ) ) {
+    if ( inputType === "Message" && ( message === undefined || message === "" || message.trim() === ""
+    ) ) {
         alert( "Prosím zadejte zprávu k dešifrování...." );
         return
     } else {
@@ -91,42 +93,39 @@ function myGreeting() {
     var inputType = document.getElementById( "inputTypeId" ).value;
     var message = document.getElementById( "messageId" ).value;
     var password = document.getElementById( "passwordId" ).value;
-    _Ciphers( message, password, inputType, cripher )
-}
-
-function _Ciphers( message, password, inputType, method ) {
     var typeMethod = document.getElementById( "encryptionMethodId" ).value;
     var PBKDF2 = document.getElementById( "ciphersPBKDF2Id" ).value;
     var bite = document.getElementById( "bitId" ).value;
     var iterace = document.getElementById( "ciphersIterationsId" ).value;
+    var paddingNorm = document.getElementById( "paddingId" ).value;
+    _Ciphers( message, password, inputType, cripher, typeMethod, PBKDF2, bite, iterace, paddingNorm )
+}
 
-    console.log( "Metoda:", typeMethod, " PBKDF2:", PBKDF2, " Bit:", bite, " iterace:", iterace );
+function _Ciphers( message, password, inputType, cripher, typeMethod, PBKDF2, bite, iterace,
+    paddingNorm ) {
+    encryptedData = "";
     try {
         if ( typeMethod === "DES" ) {
-            console.log( "DES" );
-            method = CryptoJS.DES.decrypt( message, password ).toString( CryptoJS.enc.Utf8 )
+            cripher = CryptoJS.DES.encrypt( message, password );
+            cripher = cripher.toString()
         } else {
             if ( typeMethod === "TripleDES" ) {
-                console.log( "TripleDES" );
-                method = CryptoJS.TripleDES.decrypt( message, password ).toString( CryptoJS.enc.Utf8 )
+                cripher = CryptoJS.TripleDES.encrypt( message, password );
+                cripher = cripher.toString()
             } else {
                 if ( typeMethod === "Rabbit" ) {
-                    console.log( "Rabbit" );
-                    method = CryptoJS.Rabbit.decrypt( message, password ).toString(
-                        CryptoJS.enc.Utf8 )
+                    cripher = CryptoJS.Rabbit.encrypt( message, password );
+                    cripher = cripher.toString()
                 } else {
                     if ( typeMethod === "RC4" ) {
-                        console.log( "RC4" );
-                        method = CryptoJS.RC4.decrypt( message, password ).toString(
-                            CryptoJS.enc.Utf8 )
+                        cripher = CryptoJS.RC4.encrypt( message, password );
+                        cripher = cripher.toString()
                     } else {
                         if ( typeMethod === "RC4Drop" ) {
-                            console.log( "RC4Drop" );
-                            method = CryptoJS.RC4Drop.decrypt( message, password ).toString(
-                                CryptoJS.enc.Utf8 )
+                            cripher = CryptoJS.RC4Drop.encrypt( message, password );
+                            cripher = cripher.toString()
                         } else {
                             let mode = null;
-                            var paddingNorm = document.getElementById( "paddingId" ).value;
                             if ( typeMethod === "CBC" ) {
                                 mode = CryptoJS.mode.CBC
                             } else {
@@ -172,129 +171,105 @@ function _Ciphers( message, password, inputType, method ) {
                                 }
                             };
                             if ( inputType === File ) {
-                                message = decodeURIComponent( window.atob( fileData.split(
-                                    ',' )[ 1 ] ) )
+                                message = fileData
                             };
                             if ( PBKDF2 === "Yes" ) {
-                                let biteSize = 0;
+                                let _0x1ac1x18 = 0;
                                 if ( bite == 128 ) {
-                                    biteSize = 128 / 32
+                                    _0x1ac1x18 = 128 / 32
                                 } else {
                                     if ( bite == 192 ) {
-                                        biteSize = 192 / 32
+                                        _0x1ac1x18 = 192 / 32
                                     } else {
                                         if ( bite == 256 ) {
-                                            biteSize = 256 / 32
+                                            _0x1ac1x18 = 256 / 32
                                         }
                                     }
                                 };
-                                let key = "";
-                                let encrypted = CryptoJS.enc.Hex.parse( message.substr( 0, 32 ) );
-                                let iv = CryptoJS.enc.Hex.parse( message.substr( 32, 32 ) );
-                                var decrypt = message.substring( 64 );
+                                let iv = CryptoJS.lib.WordArray.random( 128 / 8 );
+                                let _0x1ac1x1a = CryptoJS.lib.WordArray.random( 128 / 8 );
+                                let _0x1ac1x1b = "";
                                 if ( iterace > 0 ) {
-                                    key = CryptoJS.PBKDF2( password, encrypted, {
-                                        keySize: biteSize,
+                                    _0x1ac1x1b = CryptoJS.PBKDF2( password, _0x1ac1x1a, {
+                                        keySize: _0x1ac1x18,
                                         iterations: iterace
                                     } )
                                 } else {
-                                    key = CryptoJS.PBKDF2( password, encrypted, {
-                                        keySize: biteSize
+                                    _0x1ac1x1b = CryptoJS.PBKDF2( password, _0x1ac1x1a, {
+                                        keySize: _0x1ac1x18
                                     } )
                                 };
+                                let _0x1ac1x1c = null;
                                 if ( paddingNorm === "" ) {
-                                     method = CryptoJS.AES.decrypt( decrypt,
-                                        key, {
+                                    _0x1ac1x1c = CryptoJS.AES.encrypt( message, _0x1ac1x1b, {
                                         iv: iv,
                                         mode: mode
-                                    } ).toString( CryptoJS.enc.Utf8 )
+                                    } )
                                 } else {
-                                    method = CryptoJS.AES.decrypt( decrypt,
-                                        key, {
+                                    _0x1ac1x1c = CryptoJS.AES.encrypt( message, _0x1ac1x1b, {
                                         iv: iv,
                                         mode: mode,
                                         padding: paddingNorm
-                                    } ).toString( CryptoJS.enc.Utf8 )
-                                }
+                                    } )
+                                };
+                                cripher = _0x1ac1x1a.toString() + iv.toString() + _0x1ac1x1c.toString()
                             } else {
                                 if ( paddingNorm === "" ) {
-                                    method = CryptoJS.AES.decrypt( message, password, {
+                                    cripher = CryptoJS.AES.encrypt( message, password, {
                                         mode: mode
-                                    } ).toString( CryptoJS.enc.Utf8 )
+                                    } )
                                 } else {
-                                    method = CryptoJS.AES.decrypt( message, password, {
+                                    cripher = CryptoJS.AES.encrypt( message, password, {
                                         mode: mode,
                                         padding: paddingNorm
-                                    } ).toString( CryptoJS.enc.Utf8 )
+                                    } )
                                 }
-                            };
-                            isReadyEnc = true
+                            }
                         }
                     }
                 }
             }
         };
-        var controlParameters = method + "";
-        console.log( controlParameters );
-        document.getElementById( "encryptedStringId" ).value = controlParameters;
+        encryptedData = cripher + "";
+        if ( inputType === "Message" ) {
+            document.getElementById( "encryptedStringId" ).value = encryptedData
+        };
         document.getElementById( "isReadyId" ).style.display = "block";
         document.getElementById( "loaderId2" ).style.display = "none"
-        console.log( controlParameters );
     } catch ( error ) {
         document.getElementById( "encryptedStringId" ).value = "";
-        document.getElementById( "loaderId2" ).style.display = "none";
         document.getElementById( "isReadyId" ).style.display = "none";
-        console.log( "catch ", controlParameters );
-        alert( "Vyberte stejné nastavení jako u kodované zprávy...!" )
+        document.getElementById( "loaderId2" ).style.display = "none"
     }
 }
 
-function downloadDecryptedFile() {
-    var msgDownload = document.getElementById( "encryptedStringId" ).value;
-    var aTag = document.createElement( "a" );
-    let valuesPbkdf2 = msgDownload.split( "," )[ 0 ];
-    let type = false;
-    if ( valuesPbkdf2.includes( "base64" ) && valuesPbkdf2.includes( "data" ) ) {
-        aTag.setAttribute( href, msgDownload );
-        valuesPbkdf2 = valuesPbkdf2.split( ";" )[ 0 ];
-        valuesPbkdf2 = valuesPbkdf2.split( ":" )[ 1 ];
-        files.map( ( object ) => {
-            if ( object.t === valuesPbkdf2 ) {
-                type = true;
-                aTag.setAttribute( "download", getFileName() + object.f )
-            }
-        } )
-    } else {
-        aTag.setAttribute( "href", "data: text / plain; charset = utf - 8", + msgDownload );
-        aTag.setAttribute( "download", "DecryptedData.txt" );
-        type = true
-    };
-    aTag.click();
-    if ( !type ) {
-        alert( "Tento typ souboru není podporován." )
-    }
+function downloadFile() {
+    var _0x1ac1x1e = document.createElement( "a" );
+    _0x1ac1x1e.setAttribute( "href", "data: text / plain; charset = utf - 8", + encryptedData );
+    _0x1ac1x1e.setAttribute( download, getFileName() + ".txt" );
+    _0x1ac1x1e.click()
 }
 
 function getFileName() {
     var inputType = document.getElementById( "inputTypeId" ).value;
-    if ( inputType === File && filename !== null && filename !== "" && filename !==
-        undefined && filename.length > 0 ) {
+    if ( inputType === File && filename !== null && filename !== "" && filename !== undefined &&
+        filename.length > 0 ) {
         return filename.substring( 0, filename.lastIndexOf( "." ) )
     } else {
         EncryptedData
     }
 }
 
-function onSelectFile( _0x719dx25 ) {
+function onSelectFile( _0x1ac1x21 ) {
     try {
         fileData = null;
         document.getElementById( "loaderId" ).style.display = "block";
-        if ( _0x719dx25.target.files && _0x719dx25.target.files[ 0 ] ) {
-            filename = _0x719dx25.target.files[ 0 ].name;
+        if ( _0x1ac1x21.target.files && _0x1ac1x21.target.files[ 0 ] ) {
+            filename = _0x1ac1x21.target.files[ 0 ].name;
             var reader = new FileReader();
-            reader.readAsDataURL( _0x719dx25.target.files[ 0 ] );
-            reader.onload = ( _0x719dx25 ) => {
-                fileData = _0x719dx25.target.cripher.toString();
+            reader.readAsDataURL( _0x1ac1x21.target.files[ 0 ] );
+            reader.onload = ( _0x1ac1x21 ) => {
+                fileData = _0x1ac1x21.target.result.toString();
                 fileUpload = true;
                 document.getElementById( "loaderId" ).style.display = "none"
             }
@@ -314,5 +289,3 @@ function copyText123() {
     navigator.clipboard.writeText( copyTxt.value );
     alert( "Šifrovaný kód zkopírován do schránky." )
 }
-
-
