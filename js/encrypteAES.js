@@ -186,32 +186,32 @@ function _Ciphers( message, password, inputType, cripher, typeMethod, PBKDF2, bi
                                     }
                                 };
                                 let iv = CryptoJS.lib.WordArray.random( 128 / 8 );
-                                let _0x1ac1x1a = CryptoJS.lib.WordArray.random( 128 / 8 );
+                                let salt = CryptoJS.lib.WordArray.random( 128 / 8 );
                                 let key = "";
                                 if ( iterace > 0 ) {
-                                    key = CryptoJS.PBKDF2( password, _0x1ac1x1a, {
+                                    key = CryptoJS.PBKDF2( password, salt, {
                                         keySize: biteSize,
                                         iterations: iterace
                                     } )
                                 } else {
-                                    key = CryptoJS.PBKDF2( password, _0x1ac1x1a, {
+                                    key = CryptoJS.PBKDF2( password, salt, {
                                         keySize: biteSize
                                     } )
                                 };
-                                let _0x1ac1x1c = null;
+                                let padd = null;
                                 if ( paddingNorm === "" ) {
-                                    _0x1ac1x1c = CryptoJS.AES.encrypt( message, key, {
+                                    padd = CryptoJS.AES.encrypt( message, key, {
                                         iv: iv,
                                         mode: mode
                                     } )
                                 } else {
-                                    _0x1ac1x1c = CryptoJS.AES.encrypt( message, key, {
+                                    padd = CryptoJS.AES.encrypt( message, key, {
                                         iv: iv,
                                         mode: mode,
                                         padding: paddingNorm
                                     } )
                                 };
-                                cripher = _0x1ac1x1a.toString() + iv.toString() + _0x1ac1x1c.toString()
+                                cripher = salt.toString() + iv.toString() + padd.toString()
                             } else {
                                 if ( paddingNorm === "" ) {
                                     cripher = CryptoJS.AES.encrypt( message, password, {
