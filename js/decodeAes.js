@@ -249,7 +249,7 @@ function _Ciphers( message, password, inputType, method ) {
         document.getElementById( "encryptedStringId" ).value = "";
         document.getElementById( "loaderId2" ).style.display = "none";
         document.getElementById( "isReadyId" ).style.display = "none";
-        alert( "Vyberte stejné nastavení jako u kodované zprávy...!" )
+        alert( "Vyberte stejné nastavení jako u šifrované zprávy...!" )
     }
 }
 
