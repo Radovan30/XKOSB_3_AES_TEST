@@ -2,9 +2,11 @@ var fileData = "";
 var fileUpload = false;
 var filename = "";
 
+
 function reset() {
     document.getElementById( "isReadyId" ).style.display = "none"
 }
+
 
 function loadContent() {
     document.getElementById( "isReadyId" ).style.display = "none";
@@ -14,6 +16,7 @@ function loadContent() {
     filename = "";
     reset()
 }
+
 
 function changeCiphersPBKDF2() {
     reset();
@@ -26,6 +29,7 @@ function changeCiphersPBKDF2() {
         document.getElementById( "ciphersPBKDF2YesId" ).style.display = "none"
     }
 }
+
 
 function onChangeEncryptionMethod() {
     reset();
@@ -46,6 +50,7 @@ function onChangeEncryptionMethod() {
     changeCiphersPBKDF2()
 }
 
+
 function changeInputType() {
     reset();
     var inputType = document.getElementById( "inputTypeId" ).value;
@@ -60,6 +65,7 @@ function changeInputType() {
     }
 }
 
+
 function desktopViewEncrypt() {
     reset();
     var cripher = "";
@@ -67,7 +73,7 @@ function desktopViewEncrypt() {
     var message = document.getElementById( "messageId" ).value;
     var password = document.getElementById( "passwordId" ).value;
     cripher = "";
-    console.log( "desktop: ", cripher )
+
     if ( inputType === "Message" && ( message === undefined || message === "" || message.
         trim() === "" ) ) {
         alert( "Prosím zadejte zprávu k dešifrování...." );
@@ -203,7 +209,7 @@ function _Ciphers( message, password, inputType, method ) {
                                     } )
                                 };
                                 if ( paddingNorm === "" ) {
-                                     method = CryptoJS.AES.decrypt( decrypt,
+                                    method = CryptoJS.AES.decrypt( decrypt,
                                         key, {
                                         iv: iv,
                                         mode: mode
@@ -235,7 +241,6 @@ function _Ciphers( message, password, inputType, method ) {
             }
         };
         var controlParameters = method + "";
-        console.log( controlParameters );
         document.getElementById( "encryptedStringId" ).value = controlParameters;
         document.getElementById( "isReadyId" ).style.display = "block";
         document.getElementById( "loaderId2" ).style.display = "none"
@@ -244,9 +249,35 @@ function _Ciphers( message, password, inputType, method ) {
         document.getElementById( "encryptedStringId" ).value = "";
         document.getElementById( "loaderId2" ).style.display = "none";
         document.getElementById( "isReadyId" ).style.display = "none";
-        console.log( "catch ", controlParameters );
         alert( "Vyberte stejné nastavení jako u kodované zprávy...!" )
     }
+}
+
+
+function desktopViewEncrypt() {
+    reset();
+    var cripher = "";
+    var inputType = document.getElementById( "inputTypeId" ).value;
+    var message = document.getElementById( "messageId" ).value;
+    var password = document.getElementById( "passwordId" ).value;
+    cripher = "";
+
+    if ( inputType === "Message" && ( message === undefined || message === "" || message.
+        trim() === "" ) ) {
+        alert( "Prosím zadejte zprávu k dešifrování...." );
+        return
+    } else {
+        if ( inputType === File && fileUpload === false ) {
+            alert( "Prosím nahrejte soubor...." );
+            return
+        }
+    };
+    if ( password === undefined || password === "" || password.trim() === "" ) {
+        alert( "Prosím zadejte heslo...." );
+        return
+    };
+    document.getElementById( "loaderId2" ).style.display = "block";
+    setTimeout( myGreeting, 2000 )
 }
 
 function downloadDecryptedFile() {
@@ -265,7 +296,7 @@ function downloadDecryptedFile() {
             }
         } )
     } else {
-        aTag.setAttribute( "href", "data: text / plain; charset = utf - 8", + msgDownload );
+        aTag.setAttribute( "href", "data: text / plain; charset = utf - 8," + msgDownload );
         aTag.setAttribute( "download", "DecryptedData.txt" );
         type = true
     };
@@ -275,32 +306,31 @@ function downloadDecryptedFile() {
     }
 }
 
-function getFileName() {
-    var inputType = document.getElementById( "inputTypeId" ).value;
-    if ( inputType === File && filename !== null && filename !== "" && filename !==
-        undefined && filename.length > 0 ) {
-        return filename.substring( 0, filename.lastIndexOf( "." ) )
-    } else {
-        EncryptedData
-    }
-}
-
-function onSelectFile( _0x719dx25 ) {
+function onSelectFile( fileObject ) {
     try {
         fileData = null;
         document.getElementById( "loaderId" ).style.display = "block";
-        if ( _0x719dx25.target.files && _0x719dx25.target.files[ 0 ] ) {
-            filename = _0x719dx25.target.files[ 0 ].name;
-            var reader = new FileReader();
-            reader.readAsDataURL( _0x719dx25.target.files[ 0 ] );
-            reader.onload = ( _0x719dx25 ) => {
-                fileData = _0x719dx25.target.cripher.toString();
+        if ( fileObject.target.files && fileObject.target.files[ 0 ] ) {
+            filename = fileObject.target.files[ 0 ].name;
+            var writer = new FileReader();
+            writer.readAsDataURL( fileObject.target.files[ 0 ] );
+            writer.onload = ( fileObject ) => {
+                fileData = fileObject.target.result.toString();
                 fileUpload = true;
                 document.getElementById( "loaderId" ).style.display = "none"
             }
         }
     } catch ( error ) {
         document.getElementById( "loaderId" ).style.display = "none"
+    }
+}
+
+function getFileName() {
+    var inputType = document.getElementById( "inputTypeId" ).value;
+    if ( inputType === "File" && filename !== null && filename !== "" && filename !== undefined && filename.length > 0 ) {
+        return filename.substring( 0, filename.lastIndexOf( "." ) )
+    } else {
+        return "EncryptedData"
     }
 }
 
