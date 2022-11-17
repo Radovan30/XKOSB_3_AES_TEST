@@ -27,7 +27,7 @@
         <nav class="navbar">
             <ul class="nav-menu">
                 <li class="nav-item">
-                    <a class="nav-link" href="index.html">Šifrovaní</a>
+                    <a class="nav-link" href="index.html">Šifrování</a>
                 </li>
                 <li>
                     <a class="nav-link active" id="navDec" href="decode.html">Dešifrování</a>
@@ -38,26 +38,25 @@
         <section class="two">
 
             <div class="container">
-                <p>Dešifrování probíha stejným způsobem jako šifrování. </p>
+                <p>Dešifrování probíhá stejným způsobem jako šifrování. </p>
                 <p><strong style="color : red;">DŮLEŽÍTÉ !!!!</strong>
-                    <br>Je potřeba nastavit totožné nastavení jako u šifrované zpravý jinak zpráva nebude rozšifrovaná!
+                    <br>Je potřeba nastavit totožné nastavení jako u šifrované zprávy jinak zpráva nebude rozšifrována!
                     <br>Program obsahuje ošetření na rozpoznání metody. Vyjímkou jsou AES metody u kterých toto nefunguje.
                   
 
                 <p><strong>POSTUP:</strong>
-                    <br>1. vyberte způsob vložení zpravy: ZPRÁVA/ SOUBOR,
-                    <br>2. napište zprávu do textového pole / vyberte textový soubor z obrahem zpravy,
-                    <br><strong style="color : red;">Od bodu 3 a výše musí být totožné nastavení jako u šifrované zpravy.</strong>
-                    <br>3. zadejte šifrovací klič,
-                    <br>4. vyberte šifrovací metodu (jestli byl zadáný),
-                    <br>5. vyberte Padding (jestli byl zadáný),
-                    <br>6. "Klíč der. funkce" - otvíra možnos zvilit si bitovou velikost kliče (jestli byl zadáný),
-                    <br>7. "Iterace" - nastavuje počet opakovacích cyklů (jestli byl zadáný).
+                    <br>1. vyberte způsob vložení zprávy: ZPRÁVA/ SOUBOR,
+                    <br>2. napište zprávu do textového pole / vyberte textový soubor z obsahem zprávy,
+                    <br><strong style="color : red;">Od bodu 3 a výše musí být totožné nastavení jako u šifrované zprávy.</strong>
+                    <br>3. zadejte šifrovací klíč,
+                    <br>4. vyberte šifrovací metodu (jestli byla zadaná),
+                    <br>5. vyberte Padding (jestli byl zadaný),
+                    <br>6. "Klíč der. funkce" - otevírá možnos zvolit si bitovou velikost šifrovacího klíče (jestli byl zadaný),
+                    <br>7. "Iterace" - nastavuje počet opakovacích cyklů (jestli byl zadaný).
                 </p>
 
                 <p style="color : red;"><strong>DŮLEŽÍTÉ !!!!</strong>
-                    <br>Pokud se nezobrazí text v textovém poli pro "DEŠIFROVANÝ KÓD", a stažený dokument je prázdný. Je tedy možní že jste zadali špatně nastavení pro dešifrování.
-                    <br>Jestli je problém dešifrovat náhraný soubor, zkusete text ze souboru nahrat do textového pole a zkusít dešifrovat. Jestli se zpráva dešifrovala tak následně můžete zkusit znovu dešifrovat dokument. 
+                    <br>Pokud se nezobrazí text v textovém poli pro "DEŠIFROVANÝ KÓD" nebo stažený dokument je prázdný, je možné že jste nezadali stejné nastavení jako u šifrované zprávy.
                 </p>
             </div>
 
@@ -185,7 +184,6 @@
             </div>
 
         </section>
-
 
         <script src="js/decodeAES.js"></script>
     </body>

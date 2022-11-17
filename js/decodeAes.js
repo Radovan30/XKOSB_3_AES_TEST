@@ -1,3 +1,4 @@
+// vytvorene pole s podporovanymi soubory 
 var files = [ {
     "\x66": '.3gp',
     "\x74": 'video/3gpp'
@@ -216,12 +217,11 @@ var fileUpload = false;
 var filename = "";
 
 // funkce pro restartovani zobrazeni buttonu pro stahovani souboru
-
 function reset() {
     document.getElementById( "isReadyId" ).style.display = "none"
 }
 
-// funkce pro zobrazeni loaderu
+// funkce pro zobrazeni loaderu v aplikaci
 function loadContent() {
     document.getElementById( "isReadyId" ).style.display = "none";
     document.getElementById( "inputTypeMessageId" ).style.display = "block";
@@ -231,7 +231,7 @@ function loadContent() {
     reset()
 }
 
-// funkce pro zapnuti a zaznamenani hodnoty pro rozsireni sifrovaciho klice podle bitove velikosti 
+// funkce pro zapnuti a zaznamenani hodnoty pro rozsireni sifrovaciho klice podle bitove velikosti v aplikaci
 function changeCiphersPBKDF2() {
     reset();
     var valuesPbkdf2 = document.getElementById( "ciphersPBKDF2Id" ).value;
@@ -244,7 +244,7 @@ function changeCiphersPBKDF2() {
     }
 }
 
-// funkce pro vyber metod a zobrazeni jejich podfunkci
+// funkce pro vyber metod a zobrazeni jejich podfunkci v aplikaci
 function onChangeEncryptionMethod() {
     reset();
     var typeMethod = document.getElementById( "encryptionMethodId" ).value;
@@ -278,8 +278,9 @@ function changeInputType() {
     }
 }
 
-// funkce pro osetreni textove zpravy a nebo nahrani soubor
+// funkce pro osetreni textove zpravy a nahrani soubor
 function desktopViewEncrypt() {
+
     reset();
     var cripher = "";
     var inputType = document.getElementById( "inputTypeId" ).value;
@@ -305,7 +306,7 @@ function desktopViewEncrypt() {
 }
 
 
-
+// funkce pro zaznamenani vstupnich hodnot (zpusob vlozeni zpravy, zprava, klic)
 function myGreeting() {
     var cripher = "";
     var inputType = document.getElementById( "inputTypeId" ).value;
@@ -314,29 +315,41 @@ function myGreeting() {
     _Ciphers( message, password, inputType, cripher )
 }
 
+// funkce pro desifrovani 
 function _Ciphers( message, password, inputType, method ) {
+
+    // promenne pro dodatecne nastaveni pro jednotlive sifrovaci metody
     var typeMethod = document.getElementById( "encryptionMethodId" ).value;
     var PBKDF2 = document.getElementById( "ciphersPBKDF2Id" ).value;
     var bite = document.getElementById( "bitId" ).value;
     var iterace = document.getElementById( "ciphersIterationsId" ).value;
 
-    console.log( "Metoda:", typeMethod, " PBKDF2:", PBKDF2, " Bit:", bite, " iterace:", iterace );
+    //console.log( "Metoda:", typeMethod, " PBKDF2:", PBKDF2, " Bit:", bite, " iterace:", iterace );
+
+    // blok referenci pro jednotlive sifrovaci metody
     try {
+
+        // jestli je vstu nastaveny na soubor nastavi cteni zpravy ze seuboru
+        if ( inputType === 'File' ) {
+            message = decodeURIComponent( window.atob( fileData.split(',' )[ 1 ] ) )
+        };
+        
+        // jednotlive sifrovaci/desifrovani metody a jejich sifrovani
         if ( typeMethod === 'DES' ) {
-            console.log( "DES" );
+            //console.log( "DES" );
             method = CryptoJS.DES.decrypt( message, password ).toString( CryptoJS.enc.Utf8 )
         } else {
             if ( typeMethod === 'TripleDES' ) {
-                console.log( "TripleDES" );
+                //console.log( "TripleDES" );
                 method = CryptoJS.TripleDES.decrypt( message, password ).toString( CryptoJS.enc.Utf8 )
             } else {
                 if ( typeMethod === 'Rabbit' ) {
-                    console.log( "Rabbit" );
+                    //console.log( "Rabbit" );
                     method = CryptoJS.Rabbit.decrypt( message, password ).toString(
                         CryptoJS.enc.Utf8 )
                 } else {
                     if ( typeMethod === 'RC4' ) {
-                        console.log( "RC4" );
+                        //console.log( "RC4" );
                         method = CryptoJS.RC4.decrypt( message, password ).toString(
                             CryptoJS.enc.Utf8 )
                     } else {
@@ -366,6 +379,7 @@ function _Ciphers( message, password, inputType, method ) {
                                     }
                                 }
                             };
+                            // desifrovani paddingu
                             if ( paddingNorm === 'Pkcs7' ) {
                                 paddingNorm = CryptoJS.pad.Pkcs7
                             } else {
@@ -391,10 +405,7 @@ function _Ciphers( message, password, inputType, method ) {
                                     }
                                 }
                             };
-                            if ( inputType === 'File' ) {
-                                message = decodeURIComponent( window.atob( fileData.split(
-                                    ',' )[ 1 ] ) )
-                            };
+                           // zvolena velikost bitu jestli byla povolena
                             if ( PBKDF2 === 'Yes' ) {
                                 let biteSize = 0;
                                 if ( bite == 128 ) {
@@ -408,6 +419,8 @@ function _Ciphers( message, password, inputType, method ) {
                                         }
                                     }
                                 };
+
+                                // decrypt
                                 let key = "";
                                 let encrypted = CryptoJS.enc.Hex.parse( message.substr( 0, 32 ) );
                                 let iv = CryptoJS.enc.Hex.parse( message.substr( 32, 32 ) );
@@ -454,11 +467,14 @@ function _Ciphers( message, password, inputType, method ) {
                 }
             }
         };
+
+        // vypis do textoveho pole 
         var controlParameters = method + "";
         document.getElementById( "encryptedStringId" ).value = controlParameters;
         document.getElementById( "isReadyId" ).style.display = "block";
         document.getElementById( "loaderId2" ).style.display = "none"
-        console.log( controlParameters );
+        //console.log( "Contol parameter: ",controlParameters );
+
     } catch ( error ) {
         document.getElementById( "encryptedStringId" ).value = "";
         document.getElementById( "loaderId2" ).style.display = "none";
@@ -467,7 +483,7 @@ function _Ciphers( message, password, inputType, method ) {
     }
 }
 
-
+//funkce ktera hlida nahrani souboru, napsani textove zprvy a hesla 
 function desktopViewEncrypt() {
     reset();
     var cripher = "";
@@ -494,6 +510,7 @@ function desktopViewEncrypt() {
     setTimeout( myGreeting, 2000 )
 }
 
+// funkce ktera zajistuje stazeni souboru z desifrovanou zpravou a nasledne ho dekoduje za pomoci base64
 function downloadDecryptedFile() {
     var msgDownload = document.getElementById( "encryptedStringId" ).value;
     var aTag = document.createElement( "a" );

@@ -8,7 +8,7 @@ function reset() {
     document.getElementById( "isReadyId" ).style.display = "none"
 }
 
-// funkce pro zobrazeni loaderu
+// funkce pro zobrazeni loaderu  v aplikaci
 function loadContent() {
     document.getElementById( "shareId" ).style.display = "none";
     document.getElementById( "loaderId" ).style.display = "none";
@@ -19,7 +19,7 @@ function loadContent() {
     reset()
 }
 
-// funkce pro zapnuti a zaznamenani hodnoty pro rozsireni sifrovaciho klice podle bitove velikosti 
+// funkce pro zapnuti a zaznamenani hodnoty pro rozsireni sifrovaciho klice podle bitove velikosti v aplikaci
 function changeCiphersPBKDF2() {
     reset();
     var valuesPbkdf2 = document.getElementById( "ciphersPBKDF2Id" ).value;
@@ -69,12 +69,12 @@ function changeInputType() {
 // funkce pro osetreni textove zpravy a nebo nahrani soubor
 function desktopViewEncrypt() {
     reset();
-    var cripher = '';
+    var cripher = "";
     var inputType = document.getElementById( "inputTypeId" ).value;
     var message = document.getElementById( "messageId" ).value;
     var password = document.getElementById( "passwordId" ).value;
-    cripher = '';
-    if ( inputType === 'Message' && ( message === undefined || message === '' || message.trim() === ""
+    cripher = "";
+    if ( inputType === 'Message' && ( message === undefined || message === '' || message.trim() === ''
     ) ) {
         alert( "Prosím zadejte zprávu k dešifrování...." );
         return
@@ -92,8 +92,9 @@ function desktopViewEncrypt() {
     setTimeout( myGreeting, 2000 )
 }
 
+// funkce pro zaznamenani vstupnich hodnot (zpusob vlozeni zpravy, zprava, klic ....)
 function myGreeting() {
-    var cripher = '';
+    var cripher = "";
     var inputType = document.getElementById( "inputTypeId" ).value;
     var message = document.getElementById( "messageId" ).value;
     var password = document.getElementById( "passwordId" ).value;
@@ -103,13 +104,19 @@ function myGreeting() {
     var iterace = document.getElementById( "ciphersIterationsId" ).value;
     var paddingNorm = document.getElementById( "paddingId" ).value;
     _Ciphers( message, password, inputType, cripher, typeMethod, PBKDF2, bite, iterace, paddingNorm );
-    console.log( "Metoda:", typeMethod, " PBKDF2:", PBKDF2, " Bit:", bite, " iterace:", iterace );
+   // console.log( "Metoda:", typeMethod, " PBKDF2:", PBKDF2, " Bit:", bite, " iterace:", iterace );
 }
 
-
+// funkce pro sifrovani do které vstupuji vsechny potrebne promenne
 function _Ciphers( message, password, inputType, cripher, typeMethod, PBKDF2, bite, iterace, paddingNorm ) {
-    encryptedData = '';
+    encryptedData = "";
+    // jestli je vstu nastaveny na soubor nastavi cteni zpravy ze seuboru
     try {
+        if ( inputType === 'File' ) {
+            message = fileData
+            console.log( "fileData: ", message );
+        };
+        // jednotlive sifrovaci/desifrovani metody a jejich sifrovani
         if ( typeMethod === 'DES' ) {
             cripher = CryptoJS.DES.encrypt( message, password );
             cripher = cripher.toString()
@@ -150,6 +157,7 @@ function _Ciphers( message, password, inputType, cripher, typeMethod, PBKDF2, bi
                                     }
                                 }
                             };
+                            // sifrovani paddingu
                             if ( paddingNorm === 'Pkcs7' ) {
                                 paddingNorm = CryptoJS.pad.Pkcs7
                             } else {
@@ -175,9 +183,7 @@ function _Ciphers( message, password, inputType, cripher, typeMethod, PBKDF2, bi
                                     }
                                 }
                             };
-                            if ( inputType === 'File' ) {
-                                message = fileData
-                            };
+                           // zvolena velikost bitu jestli byla povolena
                             if ( PBKDF2 === 'Yes' ) {
                                 let biteSize = 0;
                                 if ( bite == 128 ) {
@@ -191,6 +197,8 @@ function _Ciphers( message, password, inputType, cripher, typeMethod, PBKDF2, bi
                                         }
                                     }
                                 };
+
+                                // encrypt
                                 let iv = CryptoJS.lib.WordArray.random( 128 / 8 );
                                 let salt = CryptoJS.lib.WordArray.random( 128 / 8 );
                                 let key = '';
@@ -234,12 +242,13 @@ function _Ciphers( message, password, inputType, cripher, typeMethod, PBKDF2, bi
                     }
                 }
             }
-        };
+        }
+        // vypis do textoveho pole 
         encryptedData = cripher + "";
         console.log( encryptedData );
         if ( inputType === 'Message' ) {
             document.getElementById( 'encryptedStringId' ).value = encryptedData;
-
+            //console.log( "Encrypted: ",encryptedData );
         };
         document.getElementById( 'isReadyId' ).style.display = 'block';
         document.getElementById( 'loaderId2' ).style.display = 'none'
