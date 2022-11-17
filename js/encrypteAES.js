@@ -3,13 +3,14 @@ var fileUpload = false;
 var filename = "";
 var encryptedData = "";
 
+// funkce pro restartovani zobrazeni buttonu pro stahovani souboru
 function reset() {
     document.getElementById( "isReadyId" ).style.display = "none"
 }
 
+// funkce pro zobrazeni loaderu
 function loadContent() {
     document.getElementById( "shareId" ).style.display = "none";
-
     document.getElementById( "loaderId" ).style.display = "none";
     document.getElementById( "inputTypeMessageId" ).style.display = "block";
     document.getElementById( "inputTypeFileId" ).style.display = "none";
@@ -18,28 +19,29 @@ function loadContent() {
     reset()
 }
 
+// funkce pro zapnuti a zaznamenani hodnoty pro rozsireni sifrovaciho klice podle bitove velikosti 
 function changeCiphersPBKDF2() {
     reset();
     var valuesPbkdf2 = document.getElementById( "ciphersPBKDF2Id" ).value;
     document.getElementById( "bitId" ).value = 128;
     document.getElementById( "ciphersIterationsId" ).value = 0;
-    if ( valuesPbkdf2 === "Yes" ) {
+    if ( valuesPbkdf2 === 'Yes' ) {
         document.getElementById( "ciphersPBKDF2YesId" ).style.display = "block"
     } else {
         document.getElementById( "ciphersPBKDF2YesId" ).style.display = "none"
     }
 }
 
+// funkce pro vyber metod a zobrazeni jejich podfunkci
 function onChangeEncryptionMethod() {
     reset();
     var typeMethod = document.getElementById( "encryptionMethodId" ).value;
-    document.getElementById( "ciphersPBKDF2Id" ).value = "No";
+    document.getElementById( "ciphersPBKDF2Id" ).value = 'No';
     document.getElementById( "bitId" ).value = 128;
-    document.getElementById( "paddingId" ).value = "";
-    document.getElementById( "ciphersPBKDF2Id" ).value = "No";
+    document.getElementById( "paddingId" ).value = '';
+    document.getElementById( "ciphersPBKDF2Id" ).value = 'No';
     document.getElementById( "ciphersIterationsId" ).value = 0;
-    if ( typeMethod === "DES" || typeMethod === "TripleDES" || typeMethod === "Rabbit" || typeMethod === "RC4" ||
-        typeMethod === "RC4Drop" ) {
+    if ( typeMethod === 'DES' || typeMethod === 'TripleDES' || typeMethod === 'Rabbit' || typeMethod === 'RC4' || typeMethod === 'RC4Drop' ) {
         document.getElementById( "paddingAndciphersPBKDF2Id" ).style.display = "none";
         document.getElementById( "ciphersPBKDF2YesId" ).style.display = "none"
     } else {
@@ -49,10 +51,11 @@ function onChangeEncryptionMethod() {
     changeCiphersPBKDF2()
 }
 
+// funkce pro zmenu textoveho pole a vyberem souboru
 function changeInputType() {
     reset();
     var inputType = document.getElementById( "inputTypeId" ).value;
-    if ( inputType === "Message" ) {
+    if ( inputType === 'Message' ) {
         document.getElementById( "inputTypeFileId" ).style.display = "none";
         document.getElementById( "inputTypeMessageId" ).style.display = "block";
         document.getElementById( "enctStrblockId" ).style.display = "block"
@@ -63,14 +66,15 @@ function changeInputType() {
     }
 }
 
+// funkce pro osetreni textove zpravy a nebo nahrani soubor
 function desktopViewEncrypt() {
     reset();
-    var cripher = "";
+    var cripher = '';
     var inputType = document.getElementById( "inputTypeId" ).value;
     var message = document.getElementById( "messageId" ).value;
     var password = document.getElementById( "passwordId" ).value;
-    cripher = "";
-    if ( inputType === "Message" && ( message === undefined || message === "" || message.trim() === ""
+    cripher = '';
+    if ( inputType === 'Message' && ( message === undefined || message === '' || message.trim() === ""
     ) ) {
         alert( "Prosím zadejte zprávu k dešifrování...." );
         return
@@ -80,7 +84,7 @@ function desktopViewEncrypt() {
             return
         }
     };
-    if ( password === undefined || password === "" || password.trim() === "" ) {
+    if ( password === undefined || password === '' || password.trim() === '' ) {
         alert( "Prosím zadejte heslo...." );
         return
     };
@@ -89,7 +93,7 @@ function desktopViewEncrypt() {
 }
 
 function myGreeting() {
-    var cripher = "";
+    var cripher = '';
     var inputType = document.getElementById( "inputTypeId" ).value;
     var message = document.getElementById( "messageId" ).value;
     var password = document.getElementById( "passwordId" ).value;
@@ -98,81 +102,83 @@ function myGreeting() {
     var bite = document.getElementById( "bitId" ).value;
     var iterace = document.getElementById( "ciphersIterationsId" ).value;
     var paddingNorm = document.getElementById( "paddingId" ).value;
-    _Ciphers( message, password, inputType, cripher, typeMethod, PBKDF2, bite, iterace, paddingNorm )
+    _Ciphers( message, password, inputType, cripher, typeMethod, PBKDF2, bite, iterace, paddingNorm );
+    console.log( "Metoda:", typeMethod, " PBKDF2:", PBKDF2, " Bit:", bite, " iterace:", iterace );
 }
 
+
 function _Ciphers( message, password, inputType, cripher, typeMethod, PBKDF2, bite, iterace, paddingNorm ) {
-    encryptedData = "";
+    encryptedData = '';
     try {
-        if ( typeMethod === "DES" ) {
+        if ( typeMethod === 'DES' ) {
             cripher = CryptoJS.DES.encrypt( message, password );
             cripher = cripher.toString()
         } else {
-            if ( typeMethod === "TripleDES" ) {
+            if ( typeMethod === 'TripleDES' ) {
                 cripher = CryptoJS.TripleDES.encrypt( message, password );
                 cripher = cripher.toString()
             } else {
-                if ( typeMethod === "Rabbit" ) {
+                if ( typeMethod === 'Rabbit' ) {
                     cripher = CryptoJS.Rabbit.encrypt( message, password );
                     cripher = cripher.toString()
                 } else {
-                    if ( typeMethod === "RC4" ) {
+                    if ( typeMethod === 'RC4' ) {
                         cripher = CryptoJS.RC4.encrypt( message, password );
                         cripher = cripher.toString()
                     } else {
-                        if ( typeMethod === "RC4Drop" ) {
+                        if ( typeMethod === 'RC4Drop' ) {
                             cripher = CryptoJS.RC4Drop.encrypt( message, password );
                             cripher = cripher.toString()
                         } else {
                             let mode = null;
-                            if ( typeMethod === "CBC" ) {
+                            if ( typeMethod === 'CBC' ) {
                                 mode = CryptoJS.mode.CBC
                             } else {
-                                if ( typeMethod === "ECB" ) {
+                                if ( typeMethod === 'ECB' ) {
                                     mode = CryptoJS.mode.ECB
                                 } else {
-                                    if ( typeMethod === "CFB" ) {
+                                    if ( typeMethod === 'CFB' ) {
                                         mode = CryptoJS.mode.CFB
                                     } else {
-                                        if ( typeMethod === "CTR" ) {
+                                        if ( typeMethod === 'CTR' ) {
                                             mode = CryptoJS.mode.CTR
                                         } else {
-                                            if ( typeMethod === "OFB" ) {
+                                            if ( typeMethod === 'OFB' ) {
                                                 mode = CryptoJS.mode.OFB
                                             }
                                         }
                                     }
                                 }
                             };
-                            if ( paddingNorm === "Pkcs7" ) {
+                            if ( paddingNorm === 'Pkcs7' ) {
                                 paddingNorm = CryptoJS.pad.Pkcs7
                             } else {
-                                if ( paddingNorm === "Iso97971" ) {
+                                if ( paddingNorm === 'Iso97971' ) {
                                     paddingNorm = CryptoJS.pad.Iso97971
                                 } else {
-                                    if ( paddingNorm === "AnsiX923" ) {
+                                    if ( paddingNorm === 'AnsiX923' ) {
                                         paddingNorm = CryptoJS.pad.AnsiX923
                                     } else {
-                                        if ( paddingNorm === "Iso10126" ) {
+                                        if ( paddingNorm === 'Iso10126' ) {
                                             paddingNorm = CryptoJS.pad.Iso10126
                                         } else {
-                                            if ( paddingNorm === "ZeroPadding" ) {
+                                            if ( paddingNorm === 'ZeroPadding' ) {
                                                 paddingNorm = CryptoJS.pad.ZeroPadding
                                             } else {
-                                                if ( paddingNorm === "NoPadding" ) {
+                                                if ( paddingNorm === 'NoPadding' ) {
                                                     paddingNorm = CryptoJS.pad.NoPadding
                                                 } else {
-                                                    paddingNorm = ""
+                                                    paddingNorm = ''
                                                 }
                                             }
                                         }
                                     }
                                 }
                             };
-                            if ( inputType === File ) {
+                            if ( inputType === 'File' ) {
                                 message = fileData
                             };
-                            if ( PBKDF2 === "Yes" ) {
+                            if ( PBKDF2 === 'Yes' ) {
                                 let biteSize = 0;
                                 if ( bite == 128 ) {
                                     biteSize = 128 / 32
@@ -187,7 +193,7 @@ function _Ciphers( message, password, inputType, cripher, typeMethod, PBKDF2, bi
                                 };
                                 let iv = CryptoJS.lib.WordArray.random( 128 / 8 );
                                 let salt = CryptoJS.lib.WordArray.random( 128 / 8 );
-                                let key = "";
+                                let key = '';
                                 if ( iterace > 0 ) {
                                     key = CryptoJS.PBKDF2( password, salt, {
                                         keySize: biteSize,
@@ -199,7 +205,7 @@ function _Ciphers( message, password, inputType, cripher, typeMethod, PBKDF2, bi
                                     } )
                                 };
                                 let padd = null;
-                                if ( paddingNorm === "" ) {
+                                if ( paddingNorm === '' ) {
                                     padd = CryptoJS.AES.encrypt( message, key, {
                                         iv: iv,
                                         mode: mode
@@ -213,7 +219,7 @@ function _Ciphers( message, password, inputType, cripher, typeMethod, PBKDF2, bi
                                 };
                                 cripher = salt.toString() + iv.toString() + padd.toString()
                             } else {
-                                if ( paddingNorm === "" ) {
+                                if ( paddingNorm === '' ) {
                                     cripher = CryptoJS.AES.encrypt( message, password, {
                                         mode: mode
                                     } )
@@ -230,36 +236,41 @@ function _Ciphers( message, password, inputType, cripher, typeMethod, PBKDF2, bi
             }
         };
         encryptedData = cripher + "";
-        if ( inputType === "Message" ) {
-            document.getElementById( "encryptedStringId" ).value = encryptedData
+        console.log( encryptedData );
+        if ( inputType === 'Message' ) {
+            document.getElementById( 'encryptedStringId' ).value = encryptedData;
+
         };
-        document.getElementById( "isReadyId" ).style.display = "block";
-        document.getElementById( "loaderId2" ).style.display = "none"
+        document.getElementById( 'isReadyId' ).style.display = 'block';
+        document.getElementById( 'loaderId2' ).style.display = 'none'
     } catch ( error ) {
-        document.getElementById( "encryptedStringId" ).value = "";
-        document.getElementById( "isReadyId" ).style.display = "none";
-        document.getElementById( "loaderId2" ).style.display = "none"
+        document.getElementById( 'encryptedStringId' ).value = "";
+        document.getElementById( 'isReadyId' ).style.display = 'none';
+        document.getElementById( 'loaderId2' ).style.display = 'none'
     }
 }
 
+// funkce pro stazeni zasifrovaneho textu z textoveho pole do souboru 
 function downloadFile() {
     var aTag = document.createElement( "a" );
-    aTag.setAttribute( "href", "data: text / plain; charset = utf - 8," + encryptedData );
+    aTag.setAttribute( 'href', 'data: text / plain; charset = utf - 8,' + encryptedData );
     console.log( getFileName() );
     aTag.setAttribute( 'download', getFileName() + '.txt' );
     console.log( getFileName() );
     aTag.click()
 }
 
+// funkce pro vraceni textoveho nazvu souboru - ok
 function getFileName() {
     var inputType = document.getElementById( "inputTypeId" ).value;
-    if ( inputType === "File" && filename !== null && filename !== "" && filename !== undefined && filename.length > 0 ) {
-        return filename.substring( 0, filename.lastIndexOf( "." ) )
+    if ( inputType === 'File' && filename !== null && filename !== '' && filename !== undefined && filename.length > 0 ) {
+        return filename.substring( 0, filename.lastIndexOf( '.' ) )
     } else {
         return "EncryptedData"
     }
 }
 
+// funkce pro vyber a nahrani souboru
 function onSelectFile( fileObject ) {
     try {
         fileData = null;
@@ -267,6 +278,7 @@ function onSelectFile( fileObject ) {
         if ( fileObject.target.files && fileObject.target.files[ 0 ] ) {
             filename = fileObject.target.files[ 0 ].name;
             var writer = new FileReader();
+            console.log( writer );
             writer.readAsDataURL( fileObject.target.files[ 0 ] );
             writer.onload = ( fileObject ) => {
                 fileData = fileObject.target.result.toString();
@@ -279,10 +291,10 @@ function onSelectFile( fileObject ) {
     }
 }
 
-
+// funkce pro zkopirovani zasifrovaneho textu po kliknuti do textoveho pole 
 function copyText123() {
     var copyTxt = document.getElementById( "encryptedStringId" );
-    if ( copyTxt.value === null || copyTxt.value === "" || copyTxt.value === undefined ) {
+    if ( copyTxt.value === null || copyTxt.value === '' || copyTxt.value === undefined ) {
         return
     };
     copyTxt.select();
