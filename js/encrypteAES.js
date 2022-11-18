@@ -8,7 +8,7 @@ function reset() {
     document.getElementById( "isReadyId" ).style.display = "none"
 }
 
-// funkce pro zobrazeni loaderu  v aplikaci
+// funkce pro nacteni obsahu
 function loadContent() {
     document.getElementById( "shareId" ).style.display = "none";
     document.getElementById( "loaderId" ).style.display = "none";
@@ -114,7 +114,7 @@ function _Ciphers( message, password, inputType, cripher, typeMethod, PBKDF2, bi
     try {
         if ( inputType === 'File' ) {
             message = fileData
-            console.log( "fileData: ", message );
+            //console.log( "fileData: ", message );
         };
         // jednotlive sifrovaci/desifrovani metody a jejich sifrovani
         if ( typeMethod === 'DES' ) {
@@ -245,7 +245,7 @@ function _Ciphers( message, password, inputType, cripher, typeMethod, PBKDF2, bi
         }
         // vypis do textoveho pole 
         encryptedData = cripher + "";
-        console.log( encryptedData );
+        //console.log( encryptedData );
         if ( inputType === 'Message' ) {
             document.getElementById( 'encryptedStringId' ).value = encryptedData;
             //console.log( "Encrypted: ",encryptedData );
@@ -263,9 +263,8 @@ function _Ciphers( message, password, inputType, cripher, typeMethod, PBKDF2, bi
 function downloadFile() {
     var aTag = document.createElement( "a" );
     aTag.setAttribute( 'href', 'data: text / plain; charset = utf - 8,' + encryptedData );
-    console.log( getFileName() );
     aTag.setAttribute( 'download', getFileName() + '.txt' );
-    console.log( getFileName() );
+    //console.log( getFileName() );
     aTag.click()
 }
 
@@ -287,7 +286,7 @@ function onSelectFile( fileObject ) {
         if ( fileObject.target.files && fileObject.target.files[ 0 ] ) {
             filename = fileObject.target.files[ 0 ].name;
             var writer = new FileReader();
-            console.log( writer );
+            //console.log( writer );
             writer.readAsDataURL( fileObject.target.files[ 0 ] );
             writer.onload = ( fileObject ) => {
                 fileData = fileObject.target.result.toString();

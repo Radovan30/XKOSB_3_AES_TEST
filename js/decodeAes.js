@@ -221,7 +221,7 @@ function reset() {
     document.getElementById( "isReadyId" ).style.display = "none"
 }
 
-// funkce pro zobrazeni loaderu v aplikaci
+// funkce pro nacteni obsahu
 function loadContent() {
     document.getElementById( "isReadyId" ).style.display = "none";
     document.getElementById( "inputTypeMessageId" ).style.display = "block";
@@ -323,7 +323,6 @@ function _Ciphers( message, password, inputType, method ) {
     var PBKDF2 = document.getElementById( "ciphersPBKDF2Id" ).value;
     var bite = document.getElementById( "bitId" ).value;
     var iterace = document.getElementById( "ciphersIterationsId" ).value;
-
     //console.log( "Metoda:", typeMethod, " PBKDF2:", PBKDF2, " Bit:", bite, " iterace:", iterace );
 
     // blok referenci pro jednotlive sifrovaci metody
@@ -354,7 +353,7 @@ function _Ciphers( message, password, inputType, method ) {
                             CryptoJS.enc.Utf8 )
                     } else {
                         if ( typeMethod === 'RC4Drop' ) {
-                            console.log( "RC4Drop" );
+                            //console.log( "RC4Drop" );
                             method = CryptoJS.RC4Drop.decrypt( message, password ).toString(
                                 CryptoJS.enc.Utf8 )
                         } else {
@@ -467,7 +466,6 @@ function _Ciphers( message, password, inputType, method ) {
                 }
             }
         };
-
         // vypis do textoveho pole 
         var controlParameters = method + "";
         document.getElementById( "encryptedStringId" ).value = controlParameters;
@@ -481,33 +479,6 @@ function _Ciphers( message, password, inputType, method ) {
         document.getElementById( "isReadyId" ).style.display = "none";
         alert( "Vyberte stejné nastavení jako u šifrované zprávy...!" )
     }
-}
-
-//funkce ktera hlida nahrani souboru, napsani textove zprvy a hesla 
-function desktopViewEncrypt() {
-    reset();
-    var cripher = "";
-    var inputType = document.getElementById( "inputTypeId" ).value;
-    var message = document.getElementById( "messageId" ).value;
-    var password = document.getElementById( "passwordId" ).value;
-    cripher = "";
-
-    if ( inputType === 'Message' && ( message === undefined || message === '' || message.
-        trim() === '' ) ) {
-        alert( "Prosím zadejte zprávu k dešifrování...." );
-        return
-    } else {
-        if ( inputType === 'File' && fileUpload === false ) {
-            alert( "Prosím nahrejte soubor...." );
-            return
-        }
-    };
-    if ( password === undefined || password === '' || password.trim() === '' ) {
-        alert( "Prosím zadejte heslo...." );
-        return
-    };
-    document.getElementById( "loaderId2" ).style.display = "block";
-    setTimeout( myGreeting, 2000 )
 }
 
 // funkce ktera zajistuje stazeni souboru z desifrovanou zpravou a nasledne ho dekoduje za pomoci base64
